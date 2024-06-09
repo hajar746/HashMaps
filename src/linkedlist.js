@@ -1,5 +1,6 @@
-function ListNode(value = null, next = null) {
+export function ListNode(key = null, value = null, next = null) {
   return {
+    key,
     value,
     next,
   };
@@ -8,11 +9,11 @@ function ListNode(value = null, next = null) {
 export function LinkedList() {
   let head = null;
 
-  const append = (data) => {
-    const newNode = ListNode(data);
-
-    if (head === null) head = newNode;
-    else {
+  const append = (key, value) => {
+    const newNode = ListNode(key, value);
+    if (head === null) {
+      head = newNode;
+    } else {
       let pointer = head;
       while (pointer.next !== null) {
         pointer = pointer.next;
@@ -21,8 +22,8 @@ export function LinkedList() {
     }
   };
 
-  const prepend = (data) => {
-    const newNode = ListNode(data, head);
+  const prepend = (key, value) => {
+    const newNode = ListNode(key, value, head);
     head = newNode;
   };
 
@@ -37,7 +38,7 @@ export function LinkedList() {
   };
 
   const findHead = () => {
-    console.log(`head node: ${head.data[1]}`);
+    console.log(`head node: ${head.value}`);
     return head;
   };
 
@@ -46,7 +47,7 @@ export function LinkedList() {
     while (pointer.next !== null) {
       pointer = pointer.next;
     }
-    console.log(`tail node: ${pointer.data[1]}`);
+    console.log(`tail node: ${pointer.value}`);
     return pointer;
   };
 
@@ -57,7 +58,7 @@ export function LinkedList() {
       pointer = pointer.next;
       i++;
     }
-    console.log(`the node at ${index} is ${pointer.data[1]}`);
+    console.log(`the node at ${index} is ${pointer.value}`);
     return pointer;
   };
 
@@ -76,7 +77,7 @@ export function LinkedList() {
   const contains = (value) => {
     let pointer = head;
     while (pointer !== null) {
-      if (pointer.data[1] === value) {
+      if (pointer.value === value) {
         console.log(true);
         return true;
       } else {
@@ -90,7 +91,7 @@ export function LinkedList() {
   const find = (value) => {
     let pointer = head;
     for (let i = 0; pointer !== null; i++) {
-      if (pointer.data[1] === value) {
+      if (pointer.value === value) {
         console.log(`index of ${value} is ${i}`);
         return i;
       } else {
@@ -105,16 +106,16 @@ export function LinkedList() {
     let pointer = head;
     let string = "";
     while (pointer !== null) {
-      string += `(${pointer.data[1]}) -> `;
+      string += `(${pointer.value}) -> `;
       pointer = pointer.next;
     }
     string += "null";
     console.log(string);
   };
 
-  const insertAt = (data, index) => {
+  const insertAt = (key, value, index) => {
     if (index === 0) {
-      prepend(data);
+      prepend(key, value);
       return;
     }
 

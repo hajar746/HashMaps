@@ -1,4 +1,4 @@
-import { LinkedList } from "./linkedlist";
+import { LinkedList, ListNode } from "./linkedlist";
 
 function HashMap() {
   let buckets = new Array(16);
@@ -35,12 +35,12 @@ function HashMap() {
   //   SETTING A VALUE IN A BUCKET/LINKED LIST
   const set = (key, value) => {
     const index = hash(key);
-    if (buckets[index] !== "" && !invalidIndex(index)) {
-      const bucket = (buckets[index] = LinkedList()); // make the bucket into a linked list
-      bucket.append({ data: [key, value] });
+    if (!invalidIndex(index) && buckets[index] == undefined) {
+      const bucket = LinkedList(); // make the bucket into a linked list
+      buckets[index] = bucket;
+      bucket.head = ListNode(key, value);
     } else {
-      const bucket = (buckets[index] = LinkedList()); // make the bucket into a linked list
-      let pointer = bucket.head;
+      let pointer = buckets[index].head;
       while (pointer !== null) {
         if (pointer.data[0] === key) {
           pointer.data[1] = value;
@@ -62,7 +62,9 @@ function HashMap() {
     if (!invalidIndex(index)) {
       let pointer = buckets[index].head;
       while (pointer !== null) {
-        if (pointer.data[0] === key) return pointer.data[1];
+        if (pointer.key === key) {
+          return pointer.value;
+        }
         pointer = pointer.next;
       }
     } else {
@@ -72,10 +74,11 @@ function HashMap() {
 
   // RETURNS TRUE IF THE KEY IS IN THE HASHMAP
   const has = (key) => {
-    for (let i = 0; i <= buckets.length; i++) {
-      let pointer = buckets[i].head;
+    const index = hash(key);
+    if (!invalidIndex(index) && buckets[index] !== undefined) {
+      let pointer = buckets[index].head;
       while (pointer !== null) {
-        if (pointer.data[0] === key) {
+        if (pointer.key === key) {
           return true;
         }
         pointer = pointer.next;
@@ -87,11 +90,11 @@ function HashMap() {
   //   REMOVE A KEY AND RETURN TRUE, OTHERWISE RETURN FALSE
   const remove = (key) => {
     const index = hash(key);
-    if (invalidIndex(index)) {
+    if (!invalidIndex(index)) {
       let pointer = buckets[index].head;
       let i = 0;
       while (pointer !== null) {
-        if (pointer.data[0] === key) {
+        if (pointer.key === key) {
           buckets[index].removeAt(i);
           capacity--;
           return true;
@@ -106,8 +109,11 @@ function HashMap() {
   //   RETURN THE TOTAL NUMBER OF STORED KEYS IN HASHMAP
   const length = () => {
     let total = 0;
-    for (const bucket of buckets) {
-      total += bucket.size();
+    for (let i = 0; i < buckets.length; i++) {
+      if (buckets[i] == undefined) total += 0;
+      else {
+        total++;
+      }
     }
     return total;
   };
@@ -119,27 +125,29 @@ function HashMap() {
   };
 
   //   RETURN AN ARRAY WITH ALL KEYS
-  const keys = () => {
-    let allKeys = [];
-    for (const bucket of buckets) {
-      let pointer = bucket.head;
-      while (pointer !== null) {
-        allKeys.push(pointer.data[0]);
-        pointer = pointer.next;
-      }
-    }
-    return allKeys;
-  };
+  // const keys = () => {
+  //   let allKeys = [];
+  //   for (let i = 0; i < buckets.length; i++) {
+  //     if (buckets[i].head !== null) {
+  //       let pointer = buckets[i].head;
+  //       allKeys.push(pointer.key);
+  //     } else {
+  //       pointer = pointer.next;
+  //     }
+  //   }
+  //   return allKeys;
+  // };
 
   //   RETURN AN ARRAY WITH ALL VALUES
   const values = () => {
     let allValues = [];
     for (const bucket of buckets) {
       let pointer = bucket.head;
-      while (pointer !== null) {
-        allValues.push(pointer.data[1]);
+      if (pointer !== null) {
+        allValues.push(pointer.value);
         pointer = pointer.next;
       }
+      return;
     }
     return allValues;
   };
@@ -150,7 +158,7 @@ function HashMap() {
     for (const bucket of buckets) {
       let pointer = bucket.head;
       while (pointer !== null) {
-        allEntries.push([pointer.data[0], pointer.data[1]]);
+        allEntries.push([pointer.key, pointer.value]);
       }
     }
     return allEntries;
@@ -173,5 +181,10 @@ function HashMap() {
 const hash = HashMap();
 
 hash.set("Apple", "red");
+hash.set("Banana", "yellow");
+hash.set("Kiwi", "green");
 
-console.log(hash.buckets);
+console.log(hash.length());
+console.log(hash.get("Kiwi"));
+console.log(hash.has("Apple"));
+console.log(hash.keys());
