@@ -120,7 +120,7 @@ export function LinkedList() {
     }
 
     const nodeBeforeIndex = at(index - 1);
-    const newNode = ListNode(data, nodeBeforeIndex.next);
+    const newNode = ListNode(key, value, nodeBeforeIndex.next);
     nodeBeforeIndex.next = newNode;
   };
 
@@ -132,6 +132,7 @@ export function LinkedList() {
 
     const nodeBeforeIndex = at(index - 1);
     nodeBeforeIndex.next = nodeBeforeIndex.next.next;
+    return;
   };
 
   return {
