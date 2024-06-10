@@ -125,42 +125,35 @@ function HashMap() {
   };
 
   //   RETURN AN ARRAY WITH ALL KEYS
-  // const keys = () => {
-  //   let allKeys = [];
-  //   for (let i = 0; i < buckets.length; i++) {
-  //     if (buckets[i].head !== null) {
-  //       let pointer = buckets[i].head;
-  //       allKeys.push(pointer.key);
-  //     } else {
-  //       pointer = pointer.next;
-  //     }
-  //   }
-  //   return allKeys;
-  // };
+  const keys = () => {
+    let allKeys = [];
+    buckets.forEach((bucket) => {
+      if (bucket !== null) {
+        allKeys.push(bucket.head.key);
+      }
+    });
+    return allKeys;
+  };
 
   //   RETURN AN ARRAY WITH ALL VALUES
   const values = () => {
     let allValues = [];
-    for (const bucket of buckets) {
-      let pointer = bucket.head;
-      if (pointer !== null) {
-        allValues.push(pointer.value);
-        pointer = pointer.next;
+    buckets.forEach((bucket) => {
+      if (bucket !== null) {
+        allValues.push(bucket.head.value);
       }
-      return;
-    }
+    });
     return allValues;
   };
 
   //   RETURN AN ARRAY WITH ALL DATA ENTRIES (KEY VALUE PAIRS)
   const entries = () => {
     let allEntries = [];
-    for (const bucket of buckets) {
-      let pointer = bucket.head;
-      while (pointer !== null) {
-        allEntries.push([pointer.key, pointer.value]);
+    buckets.forEach((bucket) => {
+      if (bucket !== null) {
+        allEntries.push([bucket.head.key, bucket.head.value]);
       }
-    }
+    });
     return allEntries;
   };
   return {
@@ -188,3 +181,5 @@ console.log(hash.length());
 console.log(hash.get("Kiwi"));
 console.log(hash.has("Apple"));
 console.log(hash.keys());
+console.log(hash.values());
+console.log(hash.entries());
