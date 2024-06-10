@@ -136,8 +136,10 @@ function HashMap() {
   const keys = () => {
     let allKeys = [];
     buckets.forEach((bucket) => {
-      if (bucket !== null) {
-        allKeys.push(bucket.head.key);
+      let pointer = bucket.head;
+      while (pointer !== null) {
+        allKeys.push(pointer.key);
+        pointer = pointer.next;
       }
     });
     return allKeys;
@@ -147,8 +149,10 @@ function HashMap() {
   const values = () => {
     let allValues = [];
     buckets.forEach((bucket) => {
-      if (bucket !== null) {
-        allValues.push(bucket.head.value);
+      let pointer = bucket.head;
+      while (pointer !== null) {
+        allValues.push(pointer.value);
+        pointer = pointer.next;
       }
     });
     return allValues;
@@ -193,3 +197,5 @@ console.log(hash.get("Kiwi"));
 console.log(hash.has("Orange"));
 console.log(hash.entries());
 console.log(hash.length());
+console.log(hash.keys());
+console.log(hash.values());
